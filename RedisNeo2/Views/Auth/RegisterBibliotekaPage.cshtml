@@ -1,0 +1,63 @@
+﻿@model RedisNeo2.Models.Entities.Biblioteka
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Registruj novog Korinsika!</h1>
+
+
+<div class = "container pt-5">
+    <div class = "row">
+        <div class = "col-md-6">
+            <h4>Add new Biblioteka</h4>
+            <form asp-action="RegisterBibliotekaPage" method="POST">
+                <div class="form-group">
+                    <label asp-for="Naziv">Naziv</label>
+                    <input type="text" class="form-control" asp-for="Naziv" />
+                    <span asp-validation-for="Naziv" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email ">Emaila adresa</label>
+                    <input type="text" class="form-control" asp-for="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Lozinka ">Lozinka</label>
+                    <input type="text" class="form-control" asp-for="Lozinka" />
+                    <span asp-validation-for="Lozinka" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="KontaktTelefon">KontaktTelefon</label>
+                    <input type="text" class="form-control" asp-for="KontaktTelefon" />
+                    <span asp-validation-for="KontaktTelefon" class="text-danger"></span>
+                </div>
+                 <div class="form-group">
+                    <label asp-for="Adresa">Adresa</label>
+                    <input type="textarea" class="form-control" asp-for="Adresa" />
+                    <span asp-validation-for="Adresa" class="text-danger"></span>
+                </div>
+               @* <div class="form-group">
+                    <label asp-for="Kategorije ">Kategorije *</label>
+                    <input type="text" class="form-control" asp-for="Kategorije" />
+                    <span asp-validation-for="Kategorije" class="text-danger"></span>
+                </div>*@
+                
+
+                @if (TempData["msg"] != null)
+                {
+                    <div class="form-group">
+                        @TempData["msg"]
+                    </div>
+                }
+                <div class="form-group pt-3">
+                    <button type="submit">Save</button>
+                    <a href="/Biblioteka/GetAll">Sve biblioteke</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

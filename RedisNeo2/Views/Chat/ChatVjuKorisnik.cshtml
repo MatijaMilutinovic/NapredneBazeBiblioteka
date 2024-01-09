@@ -1,0 +1,62 @@
+﻿@model RedisNeo2.Models.DTOs.PorukaDTO
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var p = ViewBag.PORUKA;
+    var k = ViewBag.KORISNIK;
+}
+
+<form method = "post" asp-controller="Korisnik" asp-action="Logout">
+    <button class="btn btn-info">Logout</button>
+</form>
+
+   <div class="container">
+        <div class="row p-1">
+            <div class="col-1"></div>
+             <label for="userKorisnik">KORISNIK_USER </label>
+             <div class="col-5"><span id="userKorisnik"/></div>
+            @*<div class="col-5"><input type="text" id="userInput" /></div>*@
+        </div>
+        <div class="row p-1">
+            <div class="col-1">Message</div>
+            <div class="col-5"><input type="text" class="w-100" id="messageInput" /></div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6 text-end">
+                <input type="button" id="sendButtonKorisnik" value="Send Message To All" />
+                
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6">
+                <hr />
+            </div>
+        </div>
+        <div class="row p-1">
+            <div class="col-6">
+                <ul id="messagesList"></ul>
+            </div>
+        </div>
+    </div>
+    <form asp-action="Send" method="post">
+         <div class="form-group">
+                <label asp-for="poruka">Poruka</label>
+                <input type="text" class="form-control" asp-for="poruka" />
+                <span asp-validation-for="poruka" class="text-danger"></span>
+         </div>
+        <input type="submit" id="salji" value="Chat" />
+    </form>
+    <hr/>
+    <form method="get" asp-controller="Chat" asp-action="Receive">
+        <input type="submit" id="primi" value="Chat" />
+         <div class="form-group">
+             <p>@p</p>
+             <p>@k</p>
+             <br />
+         </div>
+        
+    </form>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chatK.js"></script>

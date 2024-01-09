@@ -1,0 +1,16 @@
+﻿@model RedisNeo2.Models.Entities.Dogadjaj
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+ <form asp-action="Delete" method="post" asp-controller="Dogadjaj">
+        <input type="text" asp-for="Naziv"/>
+        <button type="submit">Obrisi</button>
+    </form>
+    
+    <form asp-action="SviPrijavljeni" method="get" asp-controller="Korisnik">
+        <input type="text" asp-for="Naziv"/>
+        <button type="submit"> PrikaziSvePrijavljene</button>
+    </form>

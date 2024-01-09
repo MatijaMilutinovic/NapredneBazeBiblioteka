@@ -1,0 +1,34 @@
+﻿@model RedisNeo2.Models.Entities.Biblioteka
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>Login Biblioteka view</h1>
+
+
+<div class = "container pt-5">
+    <div class = "row">
+        <div class = "col-md-6">
+            <h4>Login Biblioteka</h4>
+            <form asp-action="Login" method="POST">
+                <div class="form-group">
+                    <label asp-for="Email ">Emaila adresa</label>
+                    <input type="text" class="form-control" asp-for="Email" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Lozinka ">Lozinka</label>
+                    <input type="text" class="form-control" asp-for="Lozinka" />
+                    <span asp-validation-for="Lozinka" class="text-danger"></span>
+                </div>
+
+                <div class="form-group pt-3">                  
+                    <button type="submit">Sign In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

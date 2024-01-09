@@ -1,0 +1,97 @@
+﻿@page
+@model RedisNeo2.Views.Chat.ChatIndexModel
+@{
+}
+
+
+@*@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.SignalR.Client;
+@implements IAsyncDisposable;
+
+
+
+
+<PageTitle>ChatPage</PageTitle>
+<h3>LetsChat</h3>
+
+<form method = "post" asp-controller="Korisnik" asp-action="Logout">
+    <button class="btn btn-info">Logout</button>
+</form>
+
+
+
+if (!isConnected)
+{
+    <div class="input-group">
+        <input bind="username" class="form-control" placeholder="What's your name?">
+        <button class="btn btn-primary form-control-append" OnClick="Connect">
+            Connect
+        </button>
+    </div>
+}
+else
+{
+    <textarea style="width: 100%; height: 500px;" ref="TextAreaRef">
+        messages
+            </textarea>
+    <div class="input-group">
+        <input bind-value="message" bind-value:event="oninput" onkeyup="HandleInput" 
+        class="form-control"/>
+        <button class="btn btn-primary form-group-append"
+            OnClick="HandleInput"
+            disabled">
+            Send
+        </button>
+    </div>
+}
+
+
+
+@{
+    private HubConnection? hubConnection;
+    private string messages = string.Empty;
+    private string username = string.Empty;
+    private string message = string.Empty;
+
+    private async Task Connect() {
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl("/Hubs/Chat")
+            .Build();
+
+        hubConnection.On<string, string>("LetsChat", (user, message) =>
+        {
+            var msg = $"{(string.IsNullOrEmpty(user) ? "" : user + ": ")} + {message}";
+            messages += msg + "\n";
+
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task Send() {
+
+        if (hubConnection != null)
+        {
+            await hubConnection.SendAsync("SendMessage", message);
+            message = string.Empty;
+        }
+    }
+
+    public bool isConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if(hubConnection != null) 
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+    public async Task HandleInput(KeyboardEventArgs args){
+       if(args.Key.Equals("Enter"))
+       { 
+           await Send();
+       }
+    }
+}*@

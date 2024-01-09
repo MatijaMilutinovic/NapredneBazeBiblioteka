@@ -1,0 +1,15 @@
+﻿@model RedisNeo2.Models.DTOs.UpdateKorisnikBiblioDTO
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<form asp-action="UpdateKor" method="POST">
+                <div class="form-group">
+                    <label asp-for="NovaLozinka">NovaLozinka</label>
+                    <input type="text" class="form-control" asp-for="NovaLozinka" />
+                    <span asp-validation-for="NovaLozinka" class="text-danger"></span>
+                </div>
+                 <button type="submit">Update</button>
+                </form>

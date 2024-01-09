@@ -1,0 +1,10 @@
+﻿@{
+	ViewData["Title"] = "Chat Page";
+}
+<form method = "post" asp-controller="Korisnik" asp-action="Logout">
+    <button class="btn btn-info">Logout</button>
+</form>
+
+<div class="card">
+	@(await Html.RenderComponentAsync<RedisNeo2.Pages.ChatCCC>(RenderMode.Static, new {}))
+</div>

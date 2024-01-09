@@ -1,0 +1,159 @@
+﻿<h3>ChatCCC</h3>
+@page "/ChatCCC";
+
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.SignalR.Client;
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime;
+@implements IAsyncDisposable;
+@inject NavigationManager NavigationManager;
+
+
+<PageTitle>ChatPage</PageTitle>
+<h3>LetsChat</h3>
+
+
+
+
+
+@*@if (!IsConnected)
+{
+    <div class="input-group">
+        <input @bind="username" class="form-control" placeholder="What's your name?">
+        <button class="btn btn-primary form-control-append" @onclick="Connect">
+            Connect
+        </button>
+    </div>
+}
+else
+{
+    <textarea style="width: 100%; height: 500px;" @ref="TextAreaRef">
+        @messages
+            </textarea>
+    <div class="input-group">
+        <input @bind-value="message"
+           @bind-value:event="oninput"
+           @onkeyup="HandleInput"
+           class="form-control">
+        <button class="btn btn-primary form-group-append"
+            @onclick="Send"
+            disabled="@(!IsConnected)">
+            Send
+        </button>
+    </div>
+}*@
+
+<div class="form-group">
+    <label>User </label>
+    <input @bind="userInput"/>
+</div>
+<div class="form-group">
+    <label>Message </label>
+    <input @bind-value="messageInput" @bind-value:event="oninput"/>
+</div>
+<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+
+
+<hr />
+
+<ul>
+    @foreach(string poruka in listaPoruka)
+    {
+        <li>@poruka</li>
+    }
+</ul>
+
+@code {
+    private HubConnection? hubConnection;
+    private string messages = string.Empty;
+    private List<string> listaPoruka = new();
+    private string userInput;
+    private string messageInput;
+    int a = 33;
+    ElementReference TextAreaRef;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+            .WithAutomaticReconnect()
+            .Build();
+
+        hubConnection.On<string, string>("chatapp", (user, message) =>
+        {
+            var poruke = $"{user}: {message}";
+            listaPoruka.Add(poruke);
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    private async Task Send()
+    {
+        if(hubConnection is not null)
+        {
+            await hubConnection.SendAsync("SendMessage", userInput, messageInput);
+        }
+
+    }
+
+    private  void PP()
+    {
+        a = a + 21;
+    }
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+    //private async Task Connect()
+    //{
+    //    hubConnection = new HubConnectionBuilder()
+    //        .WithUrl(NavigationManager.ToAbsoluteUri($"/chathub?username={username}"))
+    //        .WithAutomaticReconnect()
+    //        .Build();
+
+    //    hubConnection.On<string, string>("GetThatMessageDude", (user, message) =>
+    //    {
+    //        var msg = $"{(string.IsNullOrEmpty(user) ? "" : user + ": ")}{message}";
+    //        messages += msg + "\n";
+    //        JSRuntime.InvokeVoidAsync("scrollToBottom", TextAreaRef);
+    //        StateHasChanged();
+    //    });
+
+    //    await hubConnection.StartAsync();
+    //}
+
+    //private async Task Send()
+    //{
+    //    if (hubConnection != null)
+    //    {
+    //        await hubConnection.SendAsync("AddMessageToChat", username, message);
+    //        message = string.Empty;
+    //    }
+    //}
+
+    //private async Task HandleInput(KeyboardEventArgs args)
+    //{
+    //    if (args.Key.Equals("Enter"))
+    //    {
+    //        await Send();
+    //    }
+    //}
+
+    //public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    //public async ValueTask DisposeAsync()
+    //{
+    //    if (hubConnection != null)
+    //    {
+    //        await hubConnection.DisposeAsync();
+    //    }
+    //}
+}
