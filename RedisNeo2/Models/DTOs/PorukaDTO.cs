@@ -2,7 +2,8 @@
 {
     public class PorukaDTO
     {
-        public string korisnik { get; set; } = string.Empty;
-        public string poruka { get; set; } = string.Empty;
+        public string Sender { get; set; } = string.Empty;
+        public string Poruka { get; set; } = string.Empty;
+        public string Receiver { get; set; } = string.Empty;
     }
 }

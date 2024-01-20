@@ -55,9 +55,11 @@ namespace RedisNeo2.Hubs
             });
             Console.ReadLine();
 
-            PorukaDTO vratiPoruku = new PorukaDTO();
-            vratiPoruku.korisnik = korisnik;
-            vratiPoruku.poruka = poruka;
+            PorukaDTO vratiPoruku = new()
+            {
+                Sender = korisnik,
+                Poruka = poruka
+            };
 
             return vratiPoruku;
         }

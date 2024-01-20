@@ -1,16 +1,13 @@
 ﻿@model RedisNeo2.Models.DTOs.PorukaDTO
+@using System.Security.Claims
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+
 @{
     var p = ViewBag.PORUKA;
     var k = ViewBag.KORISNIK;
+    var user = Context.User.FindFirstValue(ClaimTypes.Email);
 }
 
-<form method = "post" asp-controller="Korisnik" asp-action="Logout">
-    <button class="btn btn-info">Logout</button>
-</form>
 
    <div class="container">
         <div class="row p-1">
@@ -41,9 +38,14 @@
     </div>
     <form asp-action="Send" method="post" asp-controller="Chat">
          <div class="form-group">
-                <label asp-for="poruka">Poruka</label>
-                <input type="text" class="form-control" asp-for="poruka" />
-                <span asp-validation-for="poruka" class="text-danger"></span>
+                <label asp-for="Receiver ">Receiver</label>
+                <input type="text" class="form-control" asp-for="Receiver" />
+                <span asp-validation-for="Receiver" class="text-danger"></span>
+         </div>
+         <div class="form-group">
+                <label asp-for="Poruka ">Poruka</label>
+                <input type="text" class="form-control" asp-for="Poruka" />
+                <span asp-validation-for="Poruka" class="text-danger"></span>
          </div>
         <input type="submit" id="salji" value="Posalji poruku" />
     </form>

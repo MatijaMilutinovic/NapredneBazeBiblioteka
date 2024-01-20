@@ -22,23 +22,16 @@ namespace RedisNeo2.Services.Usage
             this.httpContextAccessor = httpContextAccessor;
         }
 
-        public string GetMessage()
+        public async Task SendMessage(PorukaDTO porukaZaSlati)
         {
-            throw new NotImplementedException();
-        }
 
-        public async Task SendMessage(string message)
-        {
-            var user = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var sender = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             var subscriber = _cmux.GetSubscriber();
-            string A = string.Concat(user, "^");
-            string B = string.Concat(A, message);
+            string msgToSend = $"{sender}:{porukaZaSlati.Poruka} to {porukaZaSlati.Receiver}";
+            System.Diagnostics.Debug.WriteLine($"Poruka za slati: {msgToSend}");
             IDatabase redis = _cmux.GetDatabase();
-            CancellationToken ct = new();
-            await subscriber.PublishAsync(Channel, B);
-            redis.StringSet("Key", B);
-            Thread.Sleep(2000);
-
+            await subscriber.PublishAsync(Channel, msgToSend);
+            redis.StringSet("Key", msgToSend);
         }
 
         private Task<string> GetMessageAsync()
@@ -55,8 +48,9 @@ namespace RedisNeo2.Services.Usage
         }
 
         private TaskCompletionSource<string> _tcs = new TaskCompletionSource<string>();
-        
-        public  async  Task<string> Receive() {
+
+        public async Task<string> Receive()
+        {
 
             IDatabase redis = _cmux.GetDatabase();
             var subscriber = _cmux.GetSubscriber();

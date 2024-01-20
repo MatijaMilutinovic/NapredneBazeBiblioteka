@@ -16,4 +16,4 @@ Generalni use-case kako bi se prosle sve funkcionalnosti je:
 11) Slanje poruke preko chat-a
 12) Primanje poruke preko chat-a
 
-Comentar: chat
+Comentar: chat je trenutno delimicno implementiran - fali mu frontend za prikazivanje poruka, ali je backend - slanje i primanje poruka preko redis-a potpun.

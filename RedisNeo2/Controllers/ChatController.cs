@@ -45,27 +45,26 @@ namespace RedisNeo2.Controllers
 
 
         [HttpPost]
-        public async Task<NoContentResult> Send(string poruka) {
+        public async Task<NoContentResult> Send(PorukaDTO porukaZaSlati) {
 
-            await this.chatService.SendMessage(poruka);
+            await this.chatService.SendMessage(porukaZaSlati);
             return NoContent();
             
         }
 
         [HttpGet]
-        public async Task<PorukaDTO> Receive() {
+        public async Task<string> Receive() {
 
             string D = await this.chatService.Receive();
-            string[] slice = D.Split("^");
-            //ViewBag.PORUKA = D;
-            PorukaDTO PP = new()
-            {
-                poruka = slice[1],
-                korisnik = slice[0]
-            };
+            //string[] slice = D.Split("^");
+            ////ViewBag.PORUKA = D;
+            //PorukaDTO PP = new()
+            //{
+            //    Sender = slice[0],
+            //    Poruka = slice[1],
+            //};
 
-            return PP;
+            return D;
         }
-
     }
 }
