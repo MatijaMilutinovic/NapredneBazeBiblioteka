@@ -16,23 +16,6 @@ namespace RedisNeo2.Services.Usage
             this.client = client;
         }
 
-        private void DodajToSpisak(Biblioteka n, Dogadjaj d) {
-            n.SpisakDogadjaja.Add(d);
-        }
-
-        public bool Add(string organiz, string dog, Dogadjaj noviDogadjaj)
-        {
-
-            var D = noviDogadjaj;
-            D.Organizator = organiz;
-            this.client.Cypher.Match("biblioteka:Biblioteka").Where((Biblioteka biblioteka) => biblioteka.Naziv == organiz)
-                              .Create("(biblioteka)-[r:Organizuje]->(d:Dogadjaj {D})")
-                              .WithParam("D", D)
-                              .ExecuteWithoutResultsAsync(); ;
-
-            return true;
-
-        }
 
         
     }

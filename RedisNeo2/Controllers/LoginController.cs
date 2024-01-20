@@ -31,24 +31,25 @@ namespace RedisNeo2.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(Login login)
         {
-            if (login.Login_Kao == "Korisnik") {
+            if (login.Login_Kao == "Korisnik") 
+            {
                 var k = await this.client.Cypher
-              .Match("(korisnik:Korisnik)")
-              .Where((Korisnik korisnik) =>
-               korisnik.Email == login.Email &&
-               korisnik.Lozinka == login.Lozinka)
-              .Return(korisnik => korisnik.As<Korisnik>())
-              .ResultsAsync;
+                  .Match("(korisnik:Korisnik)")
+                  .Where((Korisnik korisnik) =>
+                   korisnik.Email == login.Email &&
+                   korisnik.Lozinka == login.Lozinka)
+                  .Return(korisnik => korisnik.As<Korisnik>())
+                  .ResultsAsync;
 
-                if (k.First() == null)
+                if (!k.Any())
                 {
-                    return RedirectToAction("VecPostoji", "Korisnik");
+                    return RedirectToAction("NePostojeciKorisnik", "Korisnik");
                 }
             }
 
             if (login.Login_Kao == "Biblioteka")
             {
-                var n = await this.client.Cypher
+                var b = await this.client.Cypher
                    .Match("(biblioteka:Biblioteka)")
                    .Where((Biblioteka biblioteka) =>
                     biblioteka.Email == login.Email &&
@@ -58,23 +59,22 @@ namespace RedisNeo2.Controllers
 
 
 
-                if (n.First() == null)
+                if (!b.Any())
                 {
                     return RedirectToAction("PostojiBiblioteka", "Biblioteka");
                 }
             }
             var claims = new List<Claim> {
-                    new Claim(ClaimTypes.Email, login.Email),
-                    //new Claim(ClaimTypes.Name, login_kao),
-                    new Claim(ClaimTypes.Role, login.Login_Kao)
+                    new(ClaimTypes.Email, login.Email),
+                    new(ClaimTypes.Role, login.Login_Kao)
                 };
 
-            ClaimsIdentity identitycl = new ClaimsIdentity(
+            ClaimsIdentity identitycl = new(
                 claims,
                 CookieAuthenticationDefaults.AuthenticationScheme
             );
 
-            ClaimsPrincipal principalcl = new ClaimsPrincipal(identitycl);
+            ClaimsPrincipal principalcl = new(identitycl);
 
             var properties = new AuthenticationProperties();
 
@@ -85,12 +85,10 @@ namespace RedisNeo2.Controllers
             );
 
             if (login.Login_Kao.Equals("Korisnik"))
-               //return RedirectToAction("LoggedInKorisnik", "Korisnik");
                return RedirectToAction("LoggedInKorisnik", "Korisnik");
             else if (login.Login_Kao.Equals("Biblioteka"))
                 return RedirectToAction("LoggedInBiblioteka", "Biblioteka");
-            else
-                return RedirectToAction("LoginPage", "Login");
+            else return RedirectToAction("LoginPage", "Login");
         }
     }
 }

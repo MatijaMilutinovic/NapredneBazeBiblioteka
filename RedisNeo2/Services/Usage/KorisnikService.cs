@@ -22,19 +22,5 @@ namespace RedisNeo2.Services.Usage
 
             return true;
         }
-
-        public IEnumerable<Korisnik> SviPrijavljeni(string imeDogadjaja)
-        {
-            var b = this.client.Cypher
-                    .OptionalMatch("(korisnik:Korisnik)-[r:PrijavljenNa]->(dogadjaj:Dogadjaj)")
-                    .Where((Korisnik korisnik, Dogadjaj dogadjaj) =>
-                    dogadjaj.Naziv == imeDogadjaja)
-                    .Return(korisnik => korisnik.As<Korisnik>())
-                    .ResultsAsync;
-
-
-            return b.Result;
-        }
-
     }
 }

@@ -17,7 +17,6 @@
             <div class="col-1"></div>
              <label for="userKorisnik">KORISNIK_USER </label>
              <div class="col-5"><span id="userKorisnik"/></div>
-            @*<div class="col-5"><input type="text" id="userInput" /></div>*@
         </div>
         <div class="row p-1">
             <div class="col-1">Message</div>
@@ -40,17 +39,17 @@
             </div>
         </div>
     </div>
-    <form asp-action="Send" method="post">
+    <form asp-action="Send" method="post" asp-controller="Chat">
          <div class="form-group">
                 <label asp-for="poruka">Poruka</label>
                 <input type="text" class="form-control" asp-for="poruka" />
                 <span asp-validation-for="poruka" class="text-danger"></span>
          </div>
-        <input type="submit" id="salji" value="Chat" />
+        <input type="submit" id="salji" value="Posalji poruku" />
     </form>
     <hr/>
     <form method="get" asp-controller="Chat" asp-action="Receive">
-        <input type="submit" id="primi" value="Chat" />
+        <input type="submit" id="primi" value="Primi poruku" />
          <div class="form-group">
              <p>@p</p>
              <p>@k</p>

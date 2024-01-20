@@ -15,13 +15,11 @@ namespace RedisNeo2.Services.Usage
         private readonly IConnectionMultiplexer _cmux;
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        //private readonly IDatabase _redisDb;
         private readonly string Channel = "Kanal";
         public ChatService(IConnectionMultiplexer cmux, IHttpContextAccessor httpContextAccessor)
         {
             _cmux = cmux;
             this.httpContextAccessor = httpContextAccessor;
-            //_redisDb = redis.GetDatabase();
         }
 
         public string GetMessage()
@@ -36,7 +34,7 @@ namespace RedisNeo2.Services.Usage
             string A = string.Concat(user, "^");
             string B = string.Concat(A, message);
             IDatabase redis = _cmux.GetDatabase();
-            CancellationToken ct = new CancellationToken();
+            CancellationToken ct = new();
             await subscriber.PublishAsync(Channel, B);
             redis.StringSet("Key", B);
             Thread.Sleep(2000);
@@ -64,9 +62,6 @@ namespace RedisNeo2.Services.Usage
             var subscriber = _cmux.GetSubscriber();
             string[] slice;
             string A = await redis.StringGetAsync("Key");
-            
-            
-           // slice = _tcs.Task.ToString();
 
             return A;
 

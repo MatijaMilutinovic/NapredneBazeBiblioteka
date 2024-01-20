@@ -67,8 +67,32 @@ namespace RedisNeo2.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Logout() {
+            System.Diagnostics.Debug.WriteLine($"Logout");
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("AddBibliotekaPage");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Biblioteka")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteBiblioteka() 
+        {
+            System.Diagnostics.Debug.WriteLine($"Delete biblioteka");
+            var signedInMail = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var result = await client.Cypher.Match("(b:Biblioteka)")
+                                            .Where((Biblioteka b) => b.Email == signedInMail)
+                                            .Return(b => b.As<Biblioteka>()).ResultsAsync;
+
+            System.Diagnostics.Debug.WriteLine($"p ={result.FirstOrDefault()?.Email}");
+
+            if (result == null || !result.Any()) return RedirectToAction("UnsuccessfullyDeletedBiblioteka");
+
+            await this.client.Cypher.OptionalMatch("(b: Biblioteka)")
+                              .Where((Biblioteka b) => b.Email == signedInMail)
+                              .Delete("b")
+                              .ExecuteWithoutResultsAsync();
+
+            return RedirectToAction("SuccessfullyDeletedBiblioteka");
         }
 
         [HttpPost]
@@ -76,7 +100,7 @@ namespace RedisNeo2.Controllers
 
             var biblioteka = this.service.AddBiblioteka(model);
             if (biblioteka) {
-                return RedirectToAction("AddBibliotekaPage", "Biblioteka");
+                return RedirectToAction("LogInPage", "Login");
             }
             return View();
         }
@@ -97,6 +121,18 @@ namespace RedisNeo2.Controllers
 
         [Authorize]
         public IActionResult LoggedInBiblioteka()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult SuccessfullyDeletedBiblioteka()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult UnsuccessfullyDeletedBiblioteka()
         {
             return View();
         }

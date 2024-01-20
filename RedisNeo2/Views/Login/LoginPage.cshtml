@@ -14,13 +14,13 @@
            <form asp-action="Login" method="POST">
                 <label asp-for="Login_Kao">Login-ujete se kao:</label>
                 <div class="form-group">
-                    <label asp-for="Login_Kao ">login Kao</label>
+                    @* <label asp-for="Login_Kao ">login Kao</label> *@
                     <label for="Korisnik">Korisnik</label> <input type="radio" id="Korisnik" asp-for="Login_Kao" name="Login_Kao" value="Korisnik"/>
                     <label for="Biblioteka">Biblioteka</label> <input type="radio" id="Biblioteka" asp-for="Login_Kao" name="Login_Kao" value="Biblioteka" />
                     
                 </div>
                 <div class="form-group">
-                    <label asp-for="Email ">Emaila adresa</label>
+                    <label asp-for="Email ">Email adresa</label>
                     <input type="text" class="form-control" asp-for="Email" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>

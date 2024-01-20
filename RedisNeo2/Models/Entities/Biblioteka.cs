@@ -16,7 +16,6 @@ namespace RedisNeo2.Models.Entities
         [DataType(DataType.Password)]
         public string Lozinka { get; set; } = string.Empty;
         public string Role { get; set; } = "Biblioteka";
-        public List<Dogadjaj> SpisakDogadjaja { get; set; } = new List<Dogadjaj>();
 
     }
 }

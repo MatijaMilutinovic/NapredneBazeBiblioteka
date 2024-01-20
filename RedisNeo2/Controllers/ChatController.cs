@@ -47,7 +47,7 @@ namespace RedisNeo2.Controllers
         [HttpPost]
         public async Task<NoContentResult> Send(string poruka) {
 
-            this.chatService.SendMessage(poruka);
+            await this.chatService.SendMessage(poruka);
             return NoContent();
             
         }
@@ -58,9 +58,11 @@ namespace RedisNeo2.Controllers
             string D = await this.chatService.Receive();
             string[] slice = D.Split("^");
             //ViewBag.PORUKA = D;
-            PorukaDTO PP = new PorukaDTO(); 
-            PP.poruka = slice[1];
-            PP.korisnik = slice[0];
+            PorukaDTO PP = new()
+            {
+                poruka = slice[1],
+                korisnik = slice[0]
+            };
 
             return PP;
         }

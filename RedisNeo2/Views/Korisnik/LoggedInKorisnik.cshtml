@@ -6,14 +6,18 @@
     var a = Context.User.FindFirstValue(ClaimTypes.Email);
 }
 
-<h1>Dobrodosao Korisniče</h1>
-<h3 id = "dobrodosao"> @a</h3>
-<p> <a href="/Dogadjaj/GetAll">Svi</a> </p>
-<p> <a href="/Dogadjaj/PrijaviSePage">Prijavi se na dogadjaj</a> </p>
+<h1>Dobrodosao @a</h1>
+<p> <a href="/Chat/ChatVjuKorisnik">Chat</a> </p>
+<p> <a href="/Biblioteka/GetAll">Učlani se u biblioteku</a> </p>
 <p> <a href="/Korisnik/UpdateKorisnik">Izmeni lozniku</a> </p>
 <form method = "post" asp-controller="Korisnik" asp-action="Logout">
+    <br /><br />
     <button class="btn btn-info">Logout</button>
-    <a href="/Chat/ChatVjuKorisnik">Chat</a>
+</form>
+<br />
+<form method="post" asp-controller="Korisnik" asp-action="DeleteKorisnik">
+    @Html.AntiForgeryToken()
+    <button class="btn btn-danger">Delete Korisnik</button>
 </form>
 
 <script src="~/js~/js/KorisnikProfile.js"></script>

@@ -21,25 +21,8 @@ namespace RedisNeo2.Controllers
             this.authService = authService;
         }
 
-        [Authorize(Roles="Biblioteka")]
-        [HttpPost]
-        public IActionResult Add(string o, string d, Dogadjaj model) {
-
-            var objavljenDogadjajResultSuccess = this.authService.Add(o, d, model);
-
-            if (objavljenDogadjajResultSuccess)
-            {
-                return RedirectToAction("GetAll", "Dogadjaj");
-            }
-            return View();
-        }
-
         public IActionResult Index1()
         {
-            return View();
-        }
-
-        public IActionResult ObjaviDogadjajPage() {
             return View();
         }
 
