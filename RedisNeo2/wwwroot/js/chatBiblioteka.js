@@ -39,8 +39,8 @@ connection.start().then(function () {
         event.preventDefault();
     });
 
-    }).catch(function (err) {
-        return console.error(err.toString());
+}).catch(function (err) {
+    return console.error(err.toString());
 
 });
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using RedisNeo2.Models.DTOs;
 using RedisNeo2.Models.Entities;
@@ -30,14 +31,15 @@ namespace RedisNeo2.Hubs
            // _redisDb = redisDb;
         }
 
-        public async Task Pub(string user, string messageString) {
+        public async Task Publish(string user, string messageString) {
 
+            System.Diagnostics.Debug.WriteLine($"Pub");
             var subscriber =  _cmux.GetSubscriber();
             string A = string.Concat(user, "^");
             string B  = string.Concat(A, messageString);
             
             await subscriber.PublishAsync(Chanell, B);
-         
+            await Clients.All.SendAsync("NBP_Chat", user, messageString);
 
         }
 
@@ -45,15 +47,16 @@ namespace RedisNeo2.Hubs
             var subscriber = _cmux.GetSubscriber();
             string korisnik = string.Empty;
             string poruka = string.Empty;
-            List<string> listaPoruka = new List<string>();
+            List<string> listaPoruka = new();
+            System.Diagnostics.Debug.WriteLine($"Sub");
             await subscriber.SubscribeAsync(Chanell, (channel, porukaPLUScovek) => {
                 //listaPoruka.Add(message);
                 string[] subs = porukaPLUScovek.ToString().Split("^");
                 korisnik = subs[0];
                 poruka = subs[1];
-                Console.WriteLine("Poruku sa teksotm: " + poruka + " salje korisnik: " + korisnik);
+                System.Diagnostics.Debug.WriteLine("Poruku sa teksotm: " + poruka + " salje korisnik: " + korisnik);
+                
             });
-            Console.ReadLine();
 
             PorukaDTO vratiPoruku = new()
             {
@@ -62,6 +65,11 @@ namespace RedisNeo2.Hubs
             };
 
             return vratiPoruku;
+        }
+
+        public async Task TestPrint()
+        {
+            System.Diagnostics.Debug.WriteLine("test print");
         }
 
         public async Task SendMessageNovo(string user, string messageString)

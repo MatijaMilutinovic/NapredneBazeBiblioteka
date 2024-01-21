@@ -27,11 +27,11 @@ namespace RedisNeo2.Services.Usage
 
             var sender = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             var subscriber = _cmux.GetSubscriber();
-            string msgToSend = $"{sender}:{porukaZaSlati.Poruka} to {porukaZaSlati.Receiver}";
+            string msgToSend = $"{sender}: {porukaZaSlati.Poruka} to {porukaZaSlati.Receiver}";
             System.Diagnostics.Debug.WriteLine($"Poruka za slati: {msgToSend}");
             IDatabase redis = _cmux.GetDatabase();
             await subscriber.PublishAsync(Channel, msgToSend);
-            redis.StringSet("Key", msgToSend);
+            redis.StringSet(porukaZaSlati.Receiver, msgToSend);
         }
 
         private Task<string> GetMessageAsync()
@@ -51,15 +51,15 @@ namespace RedisNeo2.Services.Usage
 
         public async Task<string> Receive()
         {
-
+            var receiver = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             IDatabase redis = _cmux.GetDatabase();
             var subscriber = _cmux.GetSubscriber();
-            string[] slice;
-            string A = await redis.StringGetAsync("Key");
+            string A = await redis.StringGetAsync(receiver);
 
-            return A;
+            System.Diagnostics.Debug.WriteLine($"Receiver: {receiver}");
+            return A ?? "Nemate privatnih poruka!";
 
-            
+
         }
     }
 }
