@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
-using RedisNeo2.Hubs;
 using RedisNeo2.Models.DTOs;
-using RedisNeo2.Models.Entities;
 using RedisNeo2.Services.Implementation;
-using System.Security.Claims;
 
 namespace RedisNeo2.Controllers
 {
@@ -13,8 +9,9 @@ namespace RedisNeo2.Controllers
     {
         public readonly IChatServices chatService;
 
-        public ChatController(IChatServices chatService) {
-            
+        public ChatController(IChatServices chatService)
+        {
+
             this.chatService = chatService;
         }
 
@@ -26,10 +23,11 @@ namespace RedisNeo2.Controllers
             return View();
         }
 
-       
+
 
         [Authorize(Roles = "Korisnik")]
-        public IActionResult ChatVjuKorisnik() {
+        public IActionResult ChatVjuKorisnik()
+        {
             //string D = this.chatService.Receive().ToString();
             //string[] slice = D.Split("^");
             //ViewBag.PORUKA = slice[1];
@@ -45,15 +43,17 @@ namespace RedisNeo2.Controllers
 
 
         [HttpPost]
-        public async Task<NoContentResult> Send(PorukaDTO porukaZaSlati) {
+        public async Task<NoContentResult> Send(PorukaDTO porukaZaSlati)
+        {
 
             await this.chatService.SendMessage(porukaZaSlati);
             return NoContent();
-            
+
         }
 
         [HttpGet]
-        public async Task<string> Receive() {
+        public async Task<string> Receive()
+        {
 
             string D = await this.chatService.Receive();
             //string[] slice = D.Split("^");

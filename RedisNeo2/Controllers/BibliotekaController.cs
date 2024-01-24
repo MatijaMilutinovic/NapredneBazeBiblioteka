@@ -89,7 +89,7 @@ namespace RedisNeo2.Controllers
 
             await this.client.Cypher.OptionalMatch("(b: Biblioteka)")
                               .Where((Biblioteka b) => b.Email == signedInMail)
-                              .Delete("b")
+                              .DetachDelete("b")
                               .ExecuteWithoutResultsAsync();
 
             return RedirectToAction("SuccessfullyDeletedBiblioteka");

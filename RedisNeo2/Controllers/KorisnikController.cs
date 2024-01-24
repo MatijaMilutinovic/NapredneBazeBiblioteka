@@ -148,7 +148,7 @@ namespace RedisNeo2.Controllers
 
             await this._client.Cypher.OptionalMatch("(k: Korisnik)")
                               .Where((Korisnik k) => k.Email == signedInMail)
-                              .Delete("k")
+                              .DetachDelete("k")
                               .ExecuteWithoutResultsAsync();
 
             return RedirectToAction("SuccessfullyDeletedKorisnik");
