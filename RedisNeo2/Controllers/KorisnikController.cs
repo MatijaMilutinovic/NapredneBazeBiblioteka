@@ -115,7 +115,6 @@ namespace RedisNeo2.Controllers
                 return RedirectToAction("UspesnaPrijava", "Korisnik");
             }
 
-
             return RedirectToAction("NeuspesnaPrijava", "Korisnik");
         }
 
